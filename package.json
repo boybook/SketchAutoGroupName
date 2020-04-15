@@ -1,0 +1,27 @@
+{
+  "name": "sketch-auto-group-name",
+  "description": "在你编组时自动为编组命名",
+  "version": "0.1.0",
+  "engines": {
+    "sketch": ">=49.0"
+  },
+  "skpm": {
+    "name": "AutoGroupName",
+    "manifest": "src/manifest.json",
+    "main": "AutoGroupName.sketchplugin",
+    "assets": [
+      "assets/**/*"
+    ],
+    "sketch-assets-file": "sketch-assets/icons.sketch"
+  },
+  "scripts": {
+    "build": "skpm-build",
+    "watch": "skpm-build --watch",
+    "start": "skpm-build --watch --run",
+    "postinstall": "npm run build && skpm-link"
+  },
+  "devDependencies": {
+    "@skpm/builder": "^0.7.0"
+  },
+  "author": "boybook <fangyizhou1997@qq.com>"
+}

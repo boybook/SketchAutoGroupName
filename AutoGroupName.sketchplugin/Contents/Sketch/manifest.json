@@ -1,0 +1,36 @@
+{
+  "$schema": "https://raw.githubusercontent.com/sketch-hq/SketchAPI/develop/docs/sketch-plugin-manifest-schema.json",
+  "icon": "icon.png",
+  "commands": [
+    {
+      "script": "__auto-group-name.js",
+      "name": "自动命名选中的编组",
+      "identifier": "sketch-auto-group-name.group-rename",
+      "shortcut": "cmd alt g"
+    },
+    {
+      "script": "__auto-group-name.js",
+      "name": "On Group Event",
+      "handlers": {
+        "actions": {
+          "Group": "onGroup"
+        }
+      },
+      "identifier": "sketch-auto-group-name.action-group"
+    }
+  ],
+  "menu": {
+    "title": "AutoGroupName",
+    "items": [
+      "sketch-auto-group-name.group-rename"
+    ]
+  },
+  "version": "0.1.0",
+  "description": "在你编组时自动为编组命名",
+  "name": "AutoGroupName",
+  "identifier": "AutoGroupName",
+  "disableCocoaScriptPreprocessor": true,
+  "appcast": "https://raw.githubusercontent.com//master/.appcast.xml",
+  "author": "boybook",
+  "authorEmail": "fangyizhou1997@qq.com"
+}

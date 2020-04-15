@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/sketch-hq/SketchAPI/develop/docs/sketch-plugin-manifest-schema.json",
+  "icon": "icon.png",
+  "commands": [
+    {
+      "script": "./auto-group-name.js",
+      "name": "自动命名选中的编组",
+      "identifier": "sketch-auto-group-name.group-rename",
+      "shortcut": "cmd alt g"
+    },
+    {
+      "script" : "./auto-group-name.js",
+      "name": "On Group Event",
+      "handlers" : {
+        "actions": {
+          "Group": "onGroup"
+        }
+      },
+      "identifier" : "sketch-auto-group-name.action-group"
+    }
+  ],
+  "menu": {
+    "title": "AutoGroupName",
+    "items": [
+      "sketch-auto-group-name.group-rename"
+    ]
+  }
+}
