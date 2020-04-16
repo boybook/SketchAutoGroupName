@@ -79,30 +79,18 @@ function renameGroup(group) {
     group.name = joins.join("、")
   } else {
     let best = null;
-
-    if (!sameSize) {
-      //看哪个字号大
-      texts.forEach(function (layer) {
-        if (best === null) {
-          best = layer
-        } else if (layer.style.fontSize > best.style.fontSize) {
-          best = layer
-        }
-      })
-    } else if (!sameY) {
-      //看那个在上
-      texts.forEach(function (layer) {
-        const rootRect = getRootPos(layer)
-        if (best === null) {
+    //取出最大字号，筛选出字号为最大号的文字，取y最小的
+    getSizeTexts(texts, getMaxFontSize(texts)).forEach(function (layer) {
+      const rootRect = getRootPos(layer)
+      if (best === null) {
+        best = layer;
+      } else {
+        const bestRect = getRootPos(best)
+        if (rootRect.y < bestRect.y) {
           best = layer;
-        } else {
-          const bestRect = getRootPos(best)
-          if (rootRect.y < bestRect.y) {
-            best = layer;
-          }
         }
-      })
-    }
+      }
+    })
 
     if (best != null) {
       //sketch.UI.message(best.text)
@@ -151,6 +139,28 @@ function renameGroup(group) {
       last = layer.style.fontSize
     }
     return true;
+  }
+
+  function getMaxFontSize(layers) {
+    let max = 0;
+    for (let i = 0; i < layers.length; i++) {
+      let layer = layers[i]
+      if (layer.type === 'Text' && layer.style.fontSize > max) {
+        max = layer.style.fontSize
+      }
+    }
+    return max;
+  }
+
+  function getSizeTexts(layers, fontSize) {
+    let texts = [];
+    for (let i = 0; i < layers.length; i++) {
+      let layer = layers[i]
+      if (layer.type === 'Text' && layer.style.fontSize === fontSize) {
+        texts.push(layer)
+      }
+    }
+    return texts;
   }
 
   function isAllSameY(layers) {
