@@ -1,5 +1,4 @@
 # build artifacts
-AutoGroupName.sketchplugin
 
 # npm
 node_modules
@@ -12,5 +11,6 @@ npm-debug.log
 # WebStorm
 .idea
 
+*.zip
 # sketch
 # sketch-assets
