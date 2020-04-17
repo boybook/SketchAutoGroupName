@@ -1,7 +1,7 @@
 {
   "name": "sketch-auto-group-name",
-  "description": "在你编组时自动为编组命名",
-  "version": "0.1.0",
+  "description": "Automatically names a group when you group",
+  "version": "0.1.1",
   "engines": {
     "sketch": ">=49.0"
   },

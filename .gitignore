@@ -4,6 +4,7 @@
 node_modules
 .npm
 npm-debug.log
+*.sketchplugin
 
 # mac
 .DS_Store

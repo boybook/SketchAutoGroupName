@@ -6,6 +6,7 @@ export default function() {
   const selectedLayers = doc.selectedLayers
 
   let suc = 0;
+
   selectedLayers.forEach(function (g) {
     if (g.type === 'Group') {
       renameGroup(g)
@@ -26,13 +27,9 @@ export function onGroup(context) {
   const doc = sketch.getSelectedDocument()
   const selectedLayers = doc.selectedLayers
 
-  let group = null;
-
   selectedLayers.forEach(function (g) {
-    group = g
+    if (g.type === 'Group') renameGroup(g)
   })
-
-  renameGroup(group)
 
 }
 
@@ -60,44 +57,47 @@ export function onTextChanged(context) {
 }
 
 function renameGroup(group) {
-
   const Rectangle = require('sketch/dom').Rectangle;
+  try {
+    let texts = findTextsFromGroup(group)
 
-  let texts = findTextsFromGroup(group)
+    let sameSize = isAllSameFontSize(texts);
+    let sameY = isAllSameY(texts);
+    //sketch.UI.message("sameSize=" + sameSize + " sameY=" + sameY)
+    //return;
 
-  let sameSize = isAllSameFontSize(texts);
-  let sameY = isAllSameY(texts);
-  //sketch.UI.message("sameSize=" + sameSize + " sameY=" + sameY)
-  //return;
-
-  if (sameSize && sameY) {
-    let joins = [];
-    texts.forEach(function (layer) {
-      joins.push(layer.name)
-    })
-    //sketch.UI.message(joins.join("、"))
-    group.name = joins.join("、")
-  } else {
-    let best = null;
-    //取出最大字号，筛选出字号为最大号的文字，取y最小的
-    getSizeTexts(texts, getMaxFontSize(texts)).forEach(function (layer) {
-      const rootRect = getRootPos(layer)
-      if (best === null) {
-        best = layer;
-      } else {
-        const bestRect = getRootPos(best)
-        if (rootRect.y < bestRect.y) {
-          best = layer;
-        }
-      }
-    })
-
-    if (best != null) {
-      //sketch.UI.message(best.text)
-      group.name = best.name
+    if (sameSize && sameY) {
+      let joins = [];
+      texts.forEach(function (layer) {
+        joins.push(layer.name)
+      })
+      //sketch.UI.message(joins.join("、"))
+      group.name = joins.join("、")
     } else {
-      sketch.UI.message("未匹配到")
+      let best = null;
+      //取出最大字号，筛选出字号为最大号的文字，取y最小的
+      getSizeTexts(texts, getMaxFontSize(texts)).forEach(function (layer) {
+        const rootRect = getRootPos(layer)
+        if (best === null) {
+          best = layer;
+        } else {
+          const bestRect = getRootPos(best)
+          if (rootRect.y < bestRect.y) {
+            best = layer;
+          }
+        }
+      })
+
+      if (best != null) {
+        //sketch.UI.message(best.text)
+        group.name = best.name
+      } else {
+        sketch.UI.message("未匹配到")
+      }
     }
+  } catch (e) {
+    sketch.UI.message("ERROR：" + e)
+    console.log(e)
   }
 
   /*
@@ -122,7 +122,7 @@ function renameGroup(group) {
   function getRootPos(layer) {
     let rect = new Rectangle(layer.frame)
     while ((layer = layer.parent) != null) {
-      if (layer.type === 'Artboard') {
+      if (layer.type === 'Artboard' || layer.type === 'Page') {
         return rect;
       } else {
         rect = rect.offset(layer.frame.x, layer.frame.y)
